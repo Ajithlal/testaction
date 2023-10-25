@@ -1,20 +1,35 @@
-name: Sync to S3
+name: Copy S3 Bucket
 
 on:
   push:
     branches:
-      - main  # Change this to your branch name if needed
+      - main
 
 jobs:
-  build:
+  copy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure AWS credentials
-        run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} && aws configure set default.region us-east-1
+      - name: Configure AWS credentials for source account
+        run: aws configure set aws_access_key_id ${{ secrets.SOURCE_AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.SOURCE_AWS_SECRET_ACCESS_KEY }} && aws configure set default.region us-east-1
 
-      - name: Sync to S3
-        run: aws s3 sync . s3://ajithlal-test-bucket
+      - name: Assume cross-account role in source account
+        run: |
+          assumed_role=$(aws sts assume-role --role-arn arn:aws:iam::621632844397:role/SourceS3Read --role-session-name github-action)
+          export AWS_ACCESS_KEY_ID=$(echo $assumed_role | jq -r .Credentials.AccessKeyId)
+          export AWS_SECRET_ACCESS_KEY=$(echo $assumed_role | jq -r .Credentials.SecretAccessKey)
+          export AWS_SESSION_TOKEN=$(echo $assumed_role | jq -r .Credentials.SessionToken)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SOURCE_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SOURCE_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+
+      - name: Sync from source S3 bucket
+        run: aws s3 sync s3://ajithlal-test-bucket s3://parackel-test-bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ env.AWS_SESSION_TOKEN }}
