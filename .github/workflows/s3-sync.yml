@@ -22,7 +22,7 @@ jobs:
           export AWS_STS_ACCESS_KEY_ID=$(echo $assumed_role | jq -r .Credentials.AccessKeyId)
           export AWS_STS_SECRET_ACCESS_KEY=$(echo $assumed_role | jq -r .Credentials.SecretAccessKey)
           export AWS_STS_SESSION_TOKEN=$(echo $assumed_role | jq -r .Credentials.SessionToken)
-          echo "AWS_ACCESS_KEY_ID: {{ env.AWS_STS_ACCESS_KEY_ID }}"
+          echo "AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SOURCE_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SOURCE_AWS_SECRET_ACCESS_KEY }}
@@ -30,7 +30,7 @@ jobs:
 
       - name: Sync from source S3 bucket
         run: |
-          echo "AWS_ACCESS_KEY_ID: {{ env.AWS_STS_ACCESS_KEY_ID }}"
+          echo "AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}"
           aws s3 cp s3://parackel-test-bucket s3://ajithlal-test-bucket
         env:
           AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}
