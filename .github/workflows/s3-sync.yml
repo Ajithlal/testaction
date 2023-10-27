@@ -28,7 +28,9 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
 
       - name: Sync from source S3 bucket
-        run: aws s3 cp s3://parackel-test-bucket s3://ajithlal-test-bucket
+        run: |
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          aws s3 cp s3://parackel-test-bucket s3://ajithlal-test-bucket
         env:
           AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
