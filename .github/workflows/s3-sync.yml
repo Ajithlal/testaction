@@ -19,20 +19,21 @@ jobs:
       - name: Assume cross-account role in source account
         run: |
           assumed_role=$(aws sts assume-role --role-arn arn:aws:iam::621632844397:role/S3MigrationRole --role-session-name github-action)
-          echo "AWS_STS_ACCESS_KEY_ID=$(echo $assumed_role | jq -r .Credentials.AccessKeyId)" >> $GITHUB_ENV
-          echo "AWS_STS_SECRET_ACCESS_KEY=$(echo $assumed_role | jq -r .Credentials.SecretAccessKey)" >> $GITHUB_ENV
-          echo "AWS_STS_SESSION_TOKEN=$(echo $assumed_role | jq -r .Credentials.SessionToken)" >> $GITHUB_ENV
+          echo "AWS_STS_ACCESS_KEY_ID=$(echo $assumed_role | jq -r .Credentials.AccessKeyId)"
+          echo "AWS_STS_SECRET_ACCESS_KEY=$(echo $assumed_role | jq -r .Credentials.SecretAccessKey)"
+          echo "AWS_STS_SESSION_TOKEN=$(echo $assumed_role | jq -r .Credentials.SessionToken)"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SOURCE_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SOURCE_AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
       - name: Sync from source S3 bucket
         run: |
-          echo $AWS_STS_ACCESS_KEY_ID
+          echo "AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}"
           aws s3 cp s3://parackel-test-bucket s3://ajithlal-test-bucket
         env:
-          AWS_ACCESS_KEY_ID: $AWS_STS_ACCESS_KEY_ID
-          AWS_SECRET_ACCESS_KEY: $AWS_STS_SECRET_ACCESS_KEY
-          AWS_SESSION_TOKEN: $AWS_STS_SESSION_TOKEN
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_STS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ env.AWS_STS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: us-east-1
