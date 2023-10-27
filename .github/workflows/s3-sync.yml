@@ -28,6 +28,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.SOURCE_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SOURCE_AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
       - name: Sync from source S3 bucket
         run: |
