@@ -18,7 +18,7 @@ jobs:
 
       - name: Assume cross-account role in source account
         run: |
-          assumed_role=$(aws sts assume-role --role-arn arn:aws:iam::621632844397:role/SourceS3Read --role-session-name github-action)
+          assumed_role=$(aws sts assume-role --role-arn arn:aws:iam::621632844397:role/S3MigrationRole --role-session-name github-action)
           export AWS_ACCESS_KEY_ID=$(echo $assumed_role | jq -r .Credentials.AccessKeyId)
           export AWS_SECRET_ACCESS_KEY=$(echo $assumed_role | jq -r .Credentials.SecretAccessKey)
           export AWS_SESSION_TOKEN=$(echo $assumed_role | jq -r .Credentials.SessionToken)
