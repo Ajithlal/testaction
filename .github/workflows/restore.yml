@@ -1,4 +1,4 @@
-name: Copy S3 Bucket
+name: Restore DB
 
 on:
   workflow_dispatch:
