@@ -34,7 +34,7 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
-      - name: Copy DB to bucket
+      - name: dump and store to non-prod account s3
         run: |
           chmod +x ./backup.sh
           PGPASSWORD="${{ secrets.PGPASSWORD }}" ./backup.sh
