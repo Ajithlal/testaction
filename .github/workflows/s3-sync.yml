@@ -28,7 +28,7 @@ jobs:
 
       - name: Copy DB to bucket
         run: |
-          chmod +x backup.sh
+          chmod +x ./backup.sh
           PGPASSWORD="${{ secrets.PGPASSWORD }}" ./backup.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}
