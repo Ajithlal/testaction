@@ -11,10 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install PostgreSQL Client 15
+      - name: Install PostgreSQL Client 16
         run: |
           sudo apt-get update
-          sudo apt-get install -y postgresql-client-15
+          sudo apt-get install -y postgresql-client-16
 
       - name: Verify pg_dump Version
         run: pg_dump --version
