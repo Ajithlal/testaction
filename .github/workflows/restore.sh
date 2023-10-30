@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # PostgreSQL Database Details
-PGHOST="drupal-prod.cv68spreavdv.us-east-1.rds.amazonaws.com"
+PGHOST="my-drupal.cejaq96ptmdo.us-east-1.rds.amazonaws.com"
 PGPORT="5432"
 PGUSER="postgres"
 PGPASSWORD="$PGPASSWORD"
