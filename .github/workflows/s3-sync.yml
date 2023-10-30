@@ -1,9 +1,7 @@
 name: Copy S3 Bucket
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   copy:
@@ -28,10 +26,9 @@ jobs:
           AWS_DEFAULT_REGION: us-east-1
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
-      - name: Sync from source S3 bucket
+      - name: Copy DB to bucket
         run: |
-          echo "AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}"
-          aws s3 cp s3://parackel-test-bucket s3://ajithlal-test-bucket
+          PGPASSWORD="${{ secrets.PGPASSWORD }}" ./backup.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ env.AWS_STS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_STS_SECRET_ACCESS_KEY }}
