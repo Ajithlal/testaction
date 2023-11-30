@@ -1,0 +1,1 @@
+{"version":1,"defects":{"App\\Test\\EnvGreeterTest::testEnvFromSystem":3},"times":{"App\\Test\\EnvGreeterTest::testEnvFromSystem":0.008,"App\\Test\\GreeterTest::testGreeterSaysHello":0,"App\\Test\\GreeterTest::testGreeterUsesName":0}}
